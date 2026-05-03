@@ -1,27 +1,24 @@
-# Office Games Expense Tracker (ReactJS)
+# Office Games Expense Tracker (React)
 
-This project is rebuilt from scratch using **ReactJS + Vite**.
+A React-based expense tracker app that can be hosted on **GitHub Pages**.
 
-## Features
-- Add game sessions with date, hours, payer, players, note.
-- Billing rule: **₹200/hour**, with up to **4 players** per session.
-- Track balances:
-  - Positive = should receive money
-  - Negative = owes money
-- See suggested settlements (who pays whom).
-- Data persisted in browser `localStorage`.
+## What it does
+- Track sessions with date, hours, payer, and players.
+- Uses fixed rule: **₹200 per hour**, up to **4 players per session**.
+- Calculates balances:
+  - **Positive** = should receive money.
+  - **Negative** = owes money.
+- Shows settlement suggestions (who should pay whom).
+- Stores data in browser `localStorage`.
 
-## Development
-```bash
-npm install
-npm run dev
-```
+## Run
+Just open `index.html` in your browser.
 
-## Build
-```bash
-npm run build
-```
+## Deploy on GitHub Pages
+1. Push this repo to GitHub.
+2. Open repository **Settings → Pages**.
+3. Set source to **Deploy from a branch** and choose `/ (root)`.
+4. Save.
 
-## Deploy to GitHub Pages
-- Build with `npm run build`.
-- Deploy the generated `dist/` folder using your preferred Pages workflow.
+Then access:
+`https://<your-username>.github.io/<repo-name>/`
