@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Office Games Expense Tracker (React)</title>
+    <style>
+      :root { font-family: Inter, Arial, sans-serif; }
+      body { margin:0; background:#f5f7fb; color:#111827; }
+      .wrap { max-width:1080px; margin:24px auto; padding:0 16px; }
+      .card { background:#fff; border-radius:12px; padding:16px; margin-bottom:16px; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+      .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+      label { font-weight:600; display:block; margin-bottom:4px; }
+      input, textarea, button { font:inherit; }
+      input, textarea { width:100%; box-sizing:border-box; border:1px solid #d1d5db; border-radius:8px; padding:8px; }
+      button { border:none; border-radius:8px; padding:10px 14px; cursor:pointer; color:white; background:#2563eb; margin-right:8px; }
+      button.secondary { background:#4b5563; }
+      table { width:100%; border-collapse:collapse; }
+      th, td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; }
+      .pos { color:#15803d; font-weight:700; }
+      .neg { color:#b91c1c; font-weight:700; }
+      .muted { color:#6b7280; }
+      @media (max-width: 720px){ .grid{ grid-template-columns:1fr; } }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      const RATE_PER_HOUR = 200;
+      const MAX_GROUP_SIZE = 4;
+      const STORAGE_KEY = 'office_game_tracker_react_v1';
+
+      function normalizeName(name) { return name.trim().replace(/\s+/g, ' '); }
+
+      function computeBalances(team, sessions) {
+        const balances = Object.fromEntries(team.map((n) => [n, 0]));
+        for (const s of sessions) {
+          const total = Number(s.hours) * RATE_PER_HOUR;
+          const perHead = total / s.players.length;
+          balances[s.payer] = (balances[s.payer] || 0) + total;
+          for (const p of s.players) balances[p] = (balances[p] || 0) - perHead;
+        }
+        return balances;
+      }
+
+      function suggestSettlements(balances) {
+        const eps = 0.01;
+        const creditors = Object.entries(balances).filter(([,v]) => v > eps).sort((a,b) => b[1]-a[1]);
+        const debtors = Object.entries(balances).filter(([,v]) => v < -eps).map(([n,v]) => [n,-v]).sort((a,b) => b[1]-a[1]);
+        const out = [];
+        let i = 0, j = 0;
+        while (i < debtors.length && j < creditors.length) {
+          const [debtor, debt] = debtors[i];
+          const [creditor, credit] = creditors[j];
+          const pay = Math.min(debt, credit);
+          out.push(`${debtor} pays ${creditor}: ₹${pay.toFixed(2)}`);
+          debtors[i][1] -= pay;
+          creditors[j][1] -= pay;
+          if (debtors[i][1] <= eps) i++;
+          if (creditors[j][1] <= eps) j++;
+        }
+        return out;
+      }
+
+      function App() {
+        const [team, setTeam] = React.useState([]);
+        const [sessions, setSessions] = React.useState([]);
+        const [message, setMessage] = React.useState('');
+        const [form, setForm] = React.useState({ date:'', hours:'', payer:'', players:'', note:'' });
+
+        React.useEffect(() => {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          try {
+            const parsed = JSON.parse(raw);
+            setTeam(parsed.team || []);
+            setSessions(parsed.sessions || []);
+          } catch {}
+        }, []);
+
+        React.useEffect(() => {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({ team, sessions }));
+        }, [team, sessions]);
+
+        const balances = React.useMemo(() => computeBalances(team, sessions), [team, sessions]);
+        const settlements = React.useMemo(() => suggestSettlements(balances), [balances]);
+
+        function onChange(e) { setForm({ ...form, [e.target.name]: e.target.value }); }
+
+        function addSession(e) {
+          e.preventDefault();
+          setMessage('');
+          try {
+            const payer = normalizeName(form.payer);
+            const players = form.players.split(',').map(normalizeName).filter(Boolean);
+            const hours = Number(form.hours);
+            if (!form.date) throw new Error('Date is required');
+            if (!(hours > 0)) throw new Error('Hours must be greater than 0');
+            if (players.length < 1 || players.length > MAX_GROUP_SIZE) throw new Error('Players must be between 1 and 4');
+            if (!payer) throw new Error('Payer is required');
+
+            const session = { date: form.date, hours, payer, players, note: form.note.trim() };
+            setSessions((prev) => [...prev, session]);
+            setTeam((prev) => {
+              const next = new Set(prev);
+              [payer, ...players].forEach((n) => next.add(n));
+              return [...next];
+            });
+            setForm({ date:'', hours:'', payer:'', players:'', note:'' });
+            setMessage('Session added successfully.');
+          } catch (err) {
+            setMessage(err.message);
+          }
+        }
+
+        function clearAll() {
+          if (!window.confirm('Clear all sessions and balances?')) return;
+          setTeam([]); setSessions([]); setMessage('All data cleared.');
+        }
+
+        return (
+          <div className="wrap">
+            <h1>Office Games Expense Tracker (React)</h1>
+            <p className="muted">₹200/hour, max 4 players. Positive = receive money, Negative = owes money.</p>
+
+            <div className="card">
+              <h2>Add Session</h2>
+              <form onSubmit={addSession}>
+                <div className="grid">
+                  <div><label>Date</label><input type="date" name="date" value={form.date} onChange={onChange} required /></div>
+                  <div><label>Hours</label><input type="number" min="0.5" step="0.5" name="hours" value={form.hours} onChange={onChange} required /></div>
+                  <div><label>Payer</label><input name="payer" value={form.payer} onChange={onChange} placeholder="Alice" required /></div>
+                  <div><label>Players (comma separated)</label><input name="players" value={form.players} onChange={onChange} placeholder="Alice, Bob" required /></div>
+                </div>
+                <div style={{marginTop:12}}><label>Note</label><textarea name="note" rows="2" value={form.note} onChange={onChange} /></div>
+                <div style={{marginTop:12}}>
+                  <button type="submit">Add Session</button>
+                  <button type="button" className="secondary" onClick={clearAll}>Clear All Data</button>
+                </div>
+                {message && <p className="muted">{message}</p>}
+              </form>
+            </div>
+
+            <div className="card">
+              <h2>Session History</h2>
+              <table><thead><tr><th>Date</th><th>Hours</th><th>Payer</th><th>Players</th><th>Total</th></tr></thead>
+                <tbody>
+                  {[...sessions].sort((a,b)=>a.date.localeCompare(b.date)).map((s, idx) => (
+                    <tr key={`${s.date}-${idx}`}>
+                      <td>{s.date}</td><td>{Number(s.hours).toFixed(2)}</td><td>{s.payer}</td><td>{s.players.join(', ')}</td><td>₹{(Number(s.hours)*RATE_PER_HOUR).toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody></table>
+            </div>
+
+            <div className="card">
+              <h2>Balances</h2>
+              <table><thead><tr><th>Name</th><th>Balance</th></tr></thead><tbody>
+                {Object.entries(balances).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,val]) => (
+                  <tr key={name}><td>{name}</td><td className={val >= 0 ? 'pos' : 'neg'}>{val >= 0 ? '+' : ''}{val.toFixed(2)}</td></tr>
+                ))}
+              </tbody></table>
+            </div>
+
+            <div className="card">
+              <h2>Suggested Settlements</h2>
+              <ul>
+                {settlements.length ? settlements.map((s, i) => <li key={i}>{s}</li>) : <li>No settlements needed.</li>}
+              </ul>
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+  </body>
+</html>
