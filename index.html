@@ -3,181 +3,1066 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Office Games Expense Tracker (React)</title>
+    <title>Office Games Expense Tracker</title>
     <style>
-      :root { font-family: Inter, Arial, sans-serif; }
-      body { margin:0; background:#f5f7fb; color:#111827; }
-      .wrap { max-width:1080px; margin:24px auto; padding:0 16px; }
-      .card { background:#fff; border-radius:12px; padding:16px; margin-bottom:16px; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-      .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-      label { font-weight:600; display:block; margin-bottom:4px; }
-      input, textarea, button { font:inherit; }
-      input, textarea { width:100%; box-sizing:border-box; border:1px solid #d1d5db; border-radius:8px; padding:8px; }
-      button { border:none; border-radius:8px; padding:10px 14px; cursor:pointer; color:white; background:#2563eb; margin-right:8px; }
-      button.secondary { background:#4b5563; }
-      table { width:100%; border-collapse:collapse; }
-      th, td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; }
-      .pos { color:#15803d; font-weight:700; }
-      .neg { color:#b91c1c; font-weight:700; }
-      .muted { color:#6b7280; }
-      @media (max-width: 720px){ .grid{ grid-template-columns:1fr; } }
+:root {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color-scheme: light;
+  color: #111827;
+  background: #eef4ff;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.12), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.14), transparent 28%),
+    linear-gradient(180deg, #eef4ff 0%, #f8fafc 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.container {
+  max-width: 1140px;
+  margin: 28px auto;
+  padding: 0 20px 32px;
+}
+
+h1,
+h2,
+h3,
+p,
+label,
+button {
+  margin: 0;
+}
+
+.hero-card {
+  margin-bottom: 20px;
+  padding: 28px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.eyebrow {
+  color: #2563eb;
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.hero-card h1 {
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  line-height: 1.05;
+  margin-bottom: 14px;
+}
+
+.hero-copy {
+  max-width: 720px;
+  color: #4b5563;
+  line-height: 1.75;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.metric-card {
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.12);
+}
+
+.metric-label {
+  display: block;
+  color: #64748b;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.metric-card strong {
+  font-size: 1.5rem;
+  color: #111827;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.metric-card small {
+  color: #6b7280;
+}
+
+.card {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 18px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.card h2 {
+  font-size: 1.3rem;
+  margin-bottom: 18px;
+  color: #0f172a;
+}
+
+.subtitle {
+  color: #475569;
+  margin-top: 6px;
+  margin-bottom: 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.form-grid {
+  gap: 18px;
+}
+
+label {
+  display: block;
+  color: #334155;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid #cbd5e1;
+  padding: 14px 16px;
+  margin-top: 8px;
+  background: #f8fafc;
+  color: #0f172a;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+select[multiple] {
+  min-height: 160px;
+}
+
+.actions {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+button {
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  color: white;
+  background: #2563eb;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
+}
+
+button.outline {
+  background: white;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+}
+
+button.danger {
+  background: #dc2626;
+}
+
+button.danger:hover {
+  background: #b91c1c;
+}
+
+.message {
+  margin-top: 18px;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.responsive-table {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 16px 14px;
+}
+
+thead th {
+  color: #475569;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+tbody tr {
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+tbody tr:hover {
+  background: rgba(59, 130, 246, 0.06);
+  transform: translateX(4px);
+}
+
+tbody td {
+  border-bottom: 1px solid #e2e8f0;
+  color: #1f2937;
+}
+
+.pos {
+  color: #0f766e;
+  font-weight: 700;
+}
+
+.neg {
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.preview-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.preview-chip {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.preview-chip.secondary {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.multi-select-field {
+  position: relative;
+}
+
+.multi-select {
+  position: relative;
+}
+
+.multi-select-trigger {
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #0f172a;
+  padding: 14px 16px;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.multi-select-trigger:hover {
+  border-color: #2563eb;
+}
+
+.multi-select-list {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  z-index: 10;
+  padding: 10px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.multi-select-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 12px 14px;
+  border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #0f172a;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.multi-select-item:hover {
+  background: #eff6ff;
+}
+
+.multi-select-item.selected {
+  font-weight: 700;
+}
+
+.multi-select-item.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.arrow {
+  margin-left: 16px;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.checkmark {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.balances-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.balance-summary {
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.settlement-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.settlement-list li {
+  padding: 12px 16px;
+  border-radius: 18px;
+  background: #f8fafc;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 10px;
+}
+
+.admin-panel {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.admin-form {
+  display: grid;
+  grid-template-columns: 1.7fr 0.8fr;
+  gap: 16px;
+  align-items: end;
+}
+
+.admin-controls {
+  display: grid;
+  gap: 20px;
+}
+
+.admin-row {
+  display: grid;
+  grid-template-columns: 1.9fr 1fr;
+  gap: 16px;
+  align-items: end;
+}
+
+.player-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.player-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.player-chip:hover {
+  background: #eff6ff;
+  transform: translateY(-1px);
+}
+
+.player-chip span {
+  color: #ef4444;
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  color: #64748b;
+  padding: 20px 0;
+}
+
+.fade-in {
+  animation: fadeInUp 0.7s ease both;
+}
+
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+.delay-4 { animation-delay: 0.32s; }
+.delay-5 { animation-delay: 0.4s; }
+
+.pulse {
+  animation: pulseCard 6s ease-in-out infinite alternate;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseCard {
+  from { transform: translateY(0); }
+  to { transform: translateY(-4px); }
+}
+
+@media (max-width: 1024px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-form,
+  .admin-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-card,
+  .card {
+    padding: 20px;
+  }
+
+  table {
+    min-width: 620px;
+  }
+}
     </style>
   </head>
   <body>
     <div id="root"></div>
-
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
     <script type="text/babel">
+      const { useEffect, useMemo, useRef, useState } = React;
+      const { createRoot } = ReactDOM;
+
       const RATE_PER_HOUR = 200;
-      const MAX_GROUP_SIZE = 4;
-      const STORAGE_KEY = 'office_game_tracker_react_v1';
+      const MAX_PLAYERS = 4;
+      const STORAGE_KEY = "office-games-expense-tracker-v2";
 
-      function normalizeName(name) { return name.trim().replace(/\s+/g, ' '); }
+      const normalizeName = (value) => value.trim().replace(/\s+/g, " ");
 
-      function computeBalances(team, sessions) {
-        const balances = Object.fromEntries(team.map((n) => [n, 0]));
-        for (const s of sessions) {
-          const total = Number(s.hours) * RATE_PER_HOUR;
-          const perHead = total / s.players.length;
+      const computeBalances = (members, sessions) => {
+        const balances = Object.fromEntries(members.map((name) => [name, 0]));
+
+        sessions.forEach((s) => {
+          const total = s.hours * RATE_PER_HOUR;
+          const split = total / s.players.length;
+
           balances[s.payer] = (balances[s.payer] || 0) + total;
-          for (const p of s.players) balances[p] = (balances[p] || 0) - perHead;
-        }
-        return balances;
-      }
+          s.players.forEach((p) => {
+            balances[p] = (balances[p] || 0) - split;
+          });
+        });
 
-      function suggestSettlements(balances) {
+        return balances;
+      };
+
+      const suggestedSettlements = (balances) => {
         const eps = 0.01;
-        const creditors = Object.entries(balances).filter(([,v]) => v > eps).sort((a,b) => b[1]-a[1]);
-        const debtors = Object.entries(balances).filter(([,v]) => v < -eps).map(([n,v]) => [n,-v]).sort((a,b) => b[1]-a[1]);
-        const out = [];
-        let i = 0, j = 0;
+        const creditors = Object.entries(balances)
+          .filter(([, amount]) => amount > eps)
+          .sort((a, b) => b[1] - a[1]);
+
+        const debtors = Object.entries(balances)
+          .filter(([, amount]) => amount < -eps)
+          .map(([name, amount]) => [name, -amount])
+          .sort((a, b) => b[1] - a[1]);
+
+        const moves = [];
+        let i = 0;
+        let j = 0;
+
         while (i < debtors.length && j < creditors.length) {
           const [debtor, debt] = debtors[i];
           const [creditor, credit] = creditors[j];
-          const pay = Math.min(debt, credit);
-          out.push(`${debtor} pays ${creditor}: ₹${pay.toFixed(2)}`);
-          debtors[i][1] -= pay;
-          creditors[j][1] -= pay;
-          if (debtors[i][1] <= eps) i++;
-          if (creditors[j][1] <= eps) j++;
+          const payment = Math.min(debt, credit);
+
+          moves.push(`${debtor} pays ${creditor}: ₹${payment.toFixed(2)}`);
+
+          debtors[i][1] -= payment;
+          creditors[j][1] -= payment;
+
+          if (debtors[i][1] <= eps) i += 1;
+          if (creditors[j][1] <= eps) j += 1;
         }
-        return out;
-      }
+
+        return moves;
+      };
 
       function App() {
-        const [team, setTeam] = React.useState([]);
-        const [sessions, setSessions] = React.useState([]);
-        const [message, setMessage] = React.useState('');
-        const [form, setForm] = React.useState({ date:'', hours:'', payer:'', players:'', note:'' });
+        const [team, setTeam] = useState([]);
+        const [sessions, setSessions] = useState([]);
+        const [playersConfig, setPlayersConfig] = useState(["Alice", "Bob", "Carol", "Dave"]);
+        const [message, setMessage] = useState("");
+        const [adminMode, setAdminMode] = useState(false);
+        const [adminCode, setAdminCode] = useState("");
+        const [newPlayerName, setNewPlayerName] = useState("");
+        const [playersDropdownOpen, setPlayersDropdownOpen] = useState(false);
+        const playersDropdownRef = useRef(null);
 
-        React.useEffect(() => {
+        const [form, setForm] = useState({
+          date: "",
+          hours: "",
+          payer: "",
+          players: [],
+          note: "",
+        });
+
+        useEffect(() => {
           const raw = localStorage.getItem(STORAGE_KEY);
           if (!raw) return;
+
           try {
-            const parsed = JSON.parse(raw);
-            setTeam(parsed.team || []);
-            setSessions(parsed.sessions || []);
-          } catch {}
+            const data = JSON.parse(raw);
+            setTeam(data.team || []);
+            setSessions(data.sessions || []);
+            setPlayersConfig(data.playersConfig || ["Alice", "Bob", "Carol", "Dave"]);
+          } catch {
+            setMessage("Could not read saved data.");
+          }
         }, []);
 
-        React.useEffect(() => {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify({ team, sessions }));
-        }, [team, sessions]);
+        useEffect(() => {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({ team, sessions, playersConfig }));
+        }, [team, sessions, playersConfig]);
 
-        const balances = React.useMemo(() => computeBalances(team, sessions), [team, sessions]);
-        const settlements = React.useMemo(() => suggestSettlements(balances), [balances]);
+        useEffect(() => {
+          const handleClickOutside = (event) => {
+            if (playersDropdownRef.current && !playersDropdownRef.current.contains(event.target)) {
+              setPlayersDropdownOpen(false);
+            }
+          };
 
-        function onChange(e) { setForm({ ...form, [e.target.name]: e.target.value }); }
+          document.addEventListener("mousedown", handleClickOutside);
+          return () => document.removeEventListener("mousedown", handleClickOutside);
+        }, []);
 
-        function addSession(e) {
+        const balances = useMemo(() => computeBalances(team, sessions), [team, sessions]);
+        const settlements = useMemo(() => suggestedSettlements(balances), [balances]);
+        const totalCost = useMemo(
+          () => sessions.reduce((sum, session) => sum + session.hours * RATE_PER_HOUR, 0),
+          [sessions],
+        );
+        const totalSessions = sessions.length;
+        const activePlayers = team.length;
+        const averageCost = totalSessions ? totalCost / totalSessions : 0;
+        const estimatedCost = Number(form.hours) > 0 ? Number(form.hours) * RATE_PER_HOUR : 0;
+
+        const updateField = (e) => {
+          const { name, value } = e.target;
+          setForm((prev) => ({ ...prev, [name]: value }));
+        };
+
+        const togglePlayerSelection = (player) => {
+          setMessage("");
+          setForm((prev) => {
+            const alreadySelected = prev.players.includes(player);
+            if (alreadySelected) {
+              return {
+                ...prev,
+                players: prev.players.filter((value) => value !== player),
+              };
+            }
+            if (prev.players.length >= MAX_PLAYERS) {
+              setMessage(`Select up to ${MAX_PLAYERS} players.`);
+              return prev;
+            }
+            return {
+              ...prev,
+              players: [...prev.players, player],
+            };
+          });
+        };
+
+        const onAddSession = (e) => {
           e.preventDefault();
-          setMessage('');
+          setMessage("");
+
           try {
             const payer = normalizeName(form.payer);
-            const players = form.players.split(',').map(normalizeName).filter(Boolean);
+            const players = form.players.map(normalizeName).filter(Boolean);
             const hours = Number(form.hours);
-            if (!form.date) throw new Error('Date is required');
-            if (!(hours > 0)) throw new Error('Hours must be greater than 0');
-            if (players.length < 1 || players.length > MAX_GROUP_SIZE) throw new Error('Players must be between 1 and 4');
-            if (!payer) throw new Error('Payer is required');
 
-            const session = { date: form.date, hours, payer, players, note: form.note.trim() };
-            setSessions((prev) => [...prev, session]);
+            if (!form.date) throw new Error("Date is required.");
+            if (!(hours > 0)) throw new Error("Hours must be greater than 0.");
+            if (players.length < 1 || players.length > MAX_PLAYERS) {
+              throw new Error(`Players must be between 1 and ${MAX_PLAYERS}.`);
+            }
+            if (!payer) throw new Error("Payer is required.");
+
+            const nextSession = {
+              date: form.date,
+              hours,
+              payer,
+              players,
+              note: form.note.trim(),
+            };
+
+            setSessions((prev) => [...prev, nextSession]);
             setTeam((prev) => {
-              const next = new Set(prev);
-              [payer, ...players].forEach((n) => next.add(n));
-              return [...next];
+              const names = new Set(prev);
+              [payer, ...players].forEach((name) => names.add(name));
+              return [...names];
             });
-            setForm({ date:'', hours:'', payer:'', players:'', note:'' });
-            setMessage('Session added successfully.');
+
+            setForm({ date: "", hours: "", payer: "", players: [], note: "" });
+            setMessage("Session added successfully");
           } catch (err) {
             setMessage(err.message);
           }
-        }
+        };
 
-        function clearAll() {
-          if (!window.confirm('Clear all sessions and balances?')) return;
-          setTeam([]); setSessions([]); setMessage('All data cleared.');
-        }
+        const clearAll = () => {
+          if (!window.confirm("Delete all sessions and balances?")) return;
+          setTeam([]);
+          setSessions([]);
+          setMessage("All data cleared.");
+        };
+
+        const unlockAdmin = (e) => {
+          e.preventDefault();
+          if (adminCode.trim() === "admin123") {
+            setAdminMode(true);
+            setAdminCode("");
+            setMessage("Admin mode enabled");
+            return;
+          }
+
+          setMessage("Invalid admin code");
+        };
+
+        const logoutAdmin = () => {
+          setAdminMode(false);
+          setAdminCode("");
+          setMessage("Admin mode disabled");
+        };
+
+        const addPlayer = () => {
+          const nextName = normalizeName(newPlayerName);
+          if (!nextName) {
+            setMessage("Player name cannot be empty.");
+            return;
+          }
+          if (playersConfig.includes(nextName)) {
+            setMessage("Player already exists.");
+            return;
+          }
+
+          setPlayersConfig((prev) => [...prev, nextName]);
+          setNewPlayerName("");
+          setMessage(`Player ${nextName} added.`);
+        };
+
+        const removePlayer = (player) => {
+          setPlayersConfig((prev) => prev.filter((name) => name !== player));
+          setForm((prev) => ({
+            ...prev,
+            payer: prev.payer === player ? "" : prev.payer,
+            players: prev.players.filter((name) => name !== player),
+          }));
+          setMessage(`Player ${player} removed.`);
+        };
 
         return (
-          <div className="wrap">
-            <h1>Office Games Expense Tracker (React)</h1>
-            <p className="muted">₹200/hour, max 4 players. Positive = receive money, Negative = owes money.</p>
+          <div className="container">
+            <div className="hero-card fade-in">
+              <div>
+                <p className="eyebrow">Game Expense Tracker</p>
+                <h1>Office games, settled smarter</h1>
+                <p className="hero-copy">
+                  Track shared game hours, split costs automatically, and keep team
+                  balances crystal clear. Use the admin panel to manage player options
+                  and keep the form dynamic.
+                </p>
+              </div>
 
-            <div className="card">
+              <div className="metrics-grid">
+                <article className="metric-card pulse">
+                  <span className="metric-label">Total Spend</span>
+                  <strong>₹{totalCost.toFixed(2)}</strong>
+                  <small>{totalSessions} session{totalSessions !== 1 ? 's' : ''}</small>
+                </article>
+
+                <article className="metric-card pulse">
+                  <span className="metric-label">Active Players</span>
+                  <strong>{activePlayers}</strong>
+                  <small>Players involved</small>
+                </article>
+
+                <article className="metric-card pulse">
+                  <span className="metric-label">Average Session</span>
+                  <strong>₹{averageCost.toFixed(2)}</strong>
+                  <small>Per session</small>
+                </article>
+
+                <article className="metric-card pulse">
+                  <span className="metric-label">Rate</span>
+                  <strong>₹{RATE_PER_HOUR}/hr</strong>
+                  <small>Flat rate</small>
+                </article>
+              </div>
+            </div>
+
+            <section className="card fade-in delay-1">
               <h2>Add Session</h2>
-              <form onSubmit={addSession}>
-                <div className="grid">
-                  <div><label>Date</label><input type="date" name="date" value={form.date} onChange={onChange} required /></div>
-                  <div><label>Hours</label><input type="number" min="0.5" step="0.5" name="hours" value={form.hours} onChange={onChange} required /></div>
-                  <div><label>Payer</label><input name="payer" value={form.payer} onChange={onChange} placeholder="Alice" required /></div>
-                  <div><label>Players (comma separated)</label><input name="players" value={form.players} onChange={onChange} placeholder="Alice, Bob" required /></div>
+              <form onSubmit={onAddSession} className="session-form">
+                <div className="grid form-grid">
+                  <label>
+                    Date
+                    <input
+                      type="date"
+                      name="date"
+                      value={form.date}
+                      onChange={updateField}
+                      required
+                    />
+                  </label>
+
+                  <label>
+                    Hours
+                    <input
+                      type="number"
+                      min="0.5"
+                      step="0.5"
+                      name="hours"
+                      value={form.hours}
+                      onChange={updateField}
+                      required
+                    />
+                  </label>
+
+                  <label>
+                    Payer
+                    <select
+                      name="payer"
+                      value={form.payer}
+                      onChange={updateField}
+                      required
+                    >
+                      <option value="" disabled>
+                        Select payer
+                      </option>
+                      {playersConfig.map((player) => (
+                        <option key={player} value={player}>
+                          {player}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="multi-select-field">
+                    Players
+                    <div className="multi-select" ref={playersDropdownRef}>
+                      <button
+                        type="button"
+                        className="multi-select-trigger"
+                        onClick={() => setPlayersDropdownOpen((open) => !open)}
+                      >
+                        {form.players.length > 0
+                          ? form.players.join(', ')
+                          : `Select players (max ${MAX_PLAYERS})`}
+                        <span className="arrow">
+                          {playersDropdownOpen ? '▲' : '▼'}
+                        </span>
+                      </button>
+                      {playersDropdownOpen && (
+                        <div className="multi-select-list">
+                          {playersConfig.map((player) => {
+                            const selected = form.players.includes(player);
+                            const disabled = !selected && form.players.length >= MAX_PLAYERS;
+                            return (
+                              <button
+                                key={player}
+                                type="button"
+                                className={`multi-select-item ${selected ? 'selected' : ''} ${disabled ? 'disabled' : ''}`}
+                                onClick={() => togglePlayerSelection(player)}
+                                disabled={disabled}
+                              >
+                                <span>{player}</span>
+                                {selected && <span className="checkmark">✓</span>}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                    <small>
+                      {form.players.length} selected, up to {MAX_PLAYERS}
+                    </small>
+                  </label>
                 </div>
-                <div style={{marginTop:12}}><label>Note</label><textarea name="note" rows="2" value={form.note} onChange={onChange} /></div>
-                <div style={{marginTop:12}}>
+
+                <label>
+                  Note
+                  <textarea
+                    rows="2"
+                    name="note"
+                    value={form.note}
+                    onChange={updateField}
+                    placeholder="Match details, place, or team note"
+                  />
+                </label>
+
+                <div className="preview-row">
+                  <div className="preview-chip">
+                    Estimated total: ₹{estimatedCost.toFixed(2)}
+                  </div>
+                  <div className="preview-chip secondary">
+                    Selected players: {form.players.length}
+                  </div>
+                </div>
+
+                <div className="actions">
                   <button type="submit">Add Session</button>
-                  <button type="button" className="secondary" onClick={clearAll}>Clear All Data</button>
+                  <button type="button" className="danger" onClick={clearAll}>
+                    Clear All
+                  </button>
                 </div>
-                {message && <p className="muted">{message}</p>}
               </form>
-            </div>
+              {message && <p className="message">{message}</p>}
+            </section>
 
-            <div className="card">
-              <h2>Session History</h2>
-              <table><thead><tr><th>Date</th><th>Hours</th><th>Payer</th><th>Players</th><th>Total</th></tr></thead>
-                <tbody>
-                  {[...sessions].sort((a,b)=>a.date.localeCompare(b.date)).map((s, idx) => (
-                    <tr key={`${s.date}-${idx}`}>
-                      <td>{s.date}</td><td>{Number(s.hours).toFixed(2)}</td><td>{s.payer}</td><td>{s.players.join(', ')}</td><td>₹{(Number(s.hours)*RATE_PER_HOUR).toFixed(2)}</td>
+            <section className="card fade-in delay-2">
+              <h2>Activity</h2>
+              <div className="responsive-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Hours</th>
+                      <th>Payer</th>
+                      <th>Players</th>
+                      <th>Total</th>
+                      <th>Note</th>
                     </tr>
-                  ))}
-                </tbody></table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {[...sessions]
+                      .sort((a, b) => a.date.localeCompare(b.date))
+                      .map((session, idx) => (
+                        <tr key={`${session.date}-${idx}`}>
+                          <td>{session.date}</td>
+                          <td>{session.hours.toFixed(2)}</td>
+                          <td>{session.payer}</td>
+                          <td>{session.players.join(', ')}</td>
+                          <td>₹{(session.hours * RATE_PER_HOUR).toFixed(2)}</td>
+                          <td>{session.note || '—'}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
 
-            <div className="card">
-              <h2>Balances</h2>
-              <table><thead><tr><th>Name</th><th>Balance</th></tr></thead><tbody>
-                {Object.entries(balances).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,val]) => (
-                  <tr key={name}><td>{name}</td><td className={val >= 0 ? 'pos' : 'neg'}>{val >= 0 ? '+' : ''}{val.toFixed(2)}</td></tr>
-                ))}
-              </tbody></table>
-            </div>
+            <section className="card fade-in delay-3">
+              <div className="balances-header">
+                <h2>Balances</h2>
+                <div className="balance-summary">
+                  {settlements.length
+                    ? 'Settle up to keep the team aligned.'
+                    : 'Everyone is even — great job!'}
+                </div>
+              </div>
 
-            <div className="card">
+              <div className="responsive-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(balances)
+                      .sort((a, b) => a[0].localeCompare(b[0]))
+                      .map(([name, amount]) => (
+                        <tr key={name}>
+                          <td>{name}</td>
+                          <td className={amount >= 0 ? 'pos' : 'neg'}>
+                            {amount >= 0 ? '+' : ''}
+                            {amount.toFixed(2)}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section className="card fade-in delay-4">
               <h2>Suggested Settlements</h2>
-              <ul>
-                {settlements.length ? settlements.map((s, i) => <li key={i}>{s}</li>) : <li>No settlements needed.</li>}
+              <ul className="settlement-list">
+                {settlements.length ? (
+                  settlements.map((settlement, index) => (
+                    <li key={index}>{settlement}</li>
+                  ))
+                ) : (
+                  <li>No settlements needed.</li>
+                )}
               </ul>
-            </div>
+            </section>
+
+            <section className="card admin-panel fade-in delay-5">
+              <div className="admin-header">
+                <div>
+                  <h2>Admin Player Configuration</h2>
+                  <p>
+                    Manage the dropdown values used in the form. Available only to
+                    admin.
+                  </p>
+                </div>
+
+                {adminMode ? (
+                  <button type="button" className="outline" onClick={logoutAdmin}>
+                    Logout Admin
+                  </button>
+                ) : null}
+              </div>
+
+              {!adminMode ? (
+                <form className="admin-form" onSubmit={unlockAdmin}>
+                  <label>
+                    Admin code
+                    <input
+                      type="password"
+                      name="adminCode"
+                      value={adminCode}
+                      onChange={(e) => setAdminCode(e.target.value)}
+                      placeholder="Enter admin code"
+                    />
+                  </label>
+                  <button type="submit" className="outline">
+                    Unlock Admin
+                  </button>
+                </form>
+              ) : (
+                <div className="admin-controls">
+                  <div className="admin-row">
+                    <label>
+                      New player name
+                      <input
+                        type="text"
+                        value={newPlayerName}
+                        onChange={(e) => setNewPlayerName(e.target.value)}
+                        placeholder="e.g. Daniel"
+                      />
+                    </label>
+                    <button type="button" onClick={addPlayer}>
+                      Add Player
+                    </button>
+                  </div>
+
+                  <div className="player-list">
+                    {playersConfig.length ? (
+                      playersConfig.map((player) => (
+                        <button
+                          key={player}
+                          type="button"
+                          className="player-chip"
+                          onClick={() => removePlayer(player)}
+                        >
+                          {player} <span>remove</span>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="empty-state">No configured players yet.</div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </section>
           </div>
         );
       }
 
-      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+      createRoot(document.getElementById("root")).render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
     </script>
   </body>
 </html>
