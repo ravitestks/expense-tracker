@@ -4,20 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Office Games Expense Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
       :root {
-        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         color-scheme: light;
-        color: #111827;
-        background: #eef4ff;
+        color: #1e293b;
+        background: #f8fafc;
+        --primary: #3b82f6;
+        --primary-dark: #1d4ed8;
+        --primary-light: #60a5fa;
+        --success: #059669;
+        --warning: #d97706;
+        --danger: #dc2626;
+        --dark: #1e293b;
+        --light: #f8fafc;
+        --border: #e2e8f0;
+        --text-secondary: #64748b;
       }
 
       body {
         margin: 0;
         min-height: 100vh;
-        background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.12), transparent 32%),
-          radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.14), transparent 28%),
-          linear-gradient(180deg, #eef4ff 0%, #f8fafc 100%);
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
       }
 
       * {
@@ -55,7 +64,7 @@
       }
 
       .eyebrow {
-        color: #2563eb;
+        color: var(--primary);
         font-size: 0.85rem;
         letter-spacing: 0.16em;
         text-transform: uppercase;
@@ -83,16 +92,17 @@
       }
 
       .metric-card {
-        padding: 18px 20px;
-        border-radius: 20px;
-        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-        border: 1px solid rgba(148, 163, 184, 0.18);
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        padding: 20px 22px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+        border: 1px solid var(--border);
+        transition: all 0.3s ease;
       }
 
       .metric-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 18px 38px rgba(15, 23, 42, 0.12);
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(59, 130, 246, 0.12);
+        border-color: var(--primary-light);
       }
 
       .metric-label {
@@ -100,32 +110,42 @@
         color: #64748b;
         margin-bottom: 10px;
         font-size: 0.9rem;
+        font-weight: 600;
       }
 
       .metric-card strong {
-        font-size: 1.5rem;
-        color: #111827;
+        font-size: 1.6rem;
+        color: var(--primary);
         display: block;
         margin-bottom: 8px;
       }
 
       .metric-card small {
-        color: #6b7280;
+        color: #94a3b8;
+        font-size: 0.85rem;
       }
 
       .card {
-        background: white;
-        border-radius: 24px;
-        padding: 24px;
-        margin-bottom: 18px;
-        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
-        border: 1px solid rgba(148, 163, 184, 0.18);
+        background: linear-gradient(135deg, #ffffff 0%, #f9fbff 100%);
+        border-radius: 20px;
+        padding: 28px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(14, 165, 233, 0.08);
+        border: 1px solid var(--border);
+        transition: all 0.3s ease;
+      }
+
+      .card:hover {
+        box-shadow: 0 15px 50px rgba(14, 165, 233, 0.12);
       }
 
       .card h2 {
-        font-size: 1.3rem;
-        margin-bottom: 18px;
-        color: #0f172a;
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
 
       .subtitle {
@@ -168,7 +188,7 @@
       select:focus,
       textarea:focus {
         outline: none;
-        border-color: #2563eb;
+        border-color: var(--primary);
         box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
       }
 
@@ -185,31 +205,92 @@
 
       button {
         border: none;
-        border-radius: 14px;
-        padding: 14px 18px;
+        border-radius: 12px;
+        padding: 12px 16px;
         color: white;
-        background: #2563eb;
+        background: var(--primary);
         cursor: pointer;
-        transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
       }
 
       button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
+        transform: translateY(-2px);
+        background: var(--primary-dark);
+        box-shadow: 0 12px 24px rgba(59, 130, 246, 0.2);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .section-icon {
+        width: 28px;
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        margin-right: 10px;
+        font-size: 1.2rem;
+        color: white;
+      }
+
+      .icon-trends {
+        background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      }
+
+      .icon-players {
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+      }
+
+      .icon-calendar {
+        background: linear-gradient(135deg, #d946ef, #ec4899);
+      }
+
+      .icon-add {
+        background: linear-gradient(135deg, #059669, #10b981);
+      }
+
+      .icon-activity {
+        background: linear-gradient(135deg, #d97706, #f59e0b);
+      }
+
+      .icon-balance {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      }
+
+      .icon-settlement {
+        background: linear-gradient(135deg, #0891b2, #14b8a6);
+      }
+
+      .icon-balance {
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+      }
+
+      .icon-settlement {
+        background: linear-gradient(135deg, #14b8a6, #10b981);
       }
 
       button.outline {
         background: white;
-        color: #2563eb;
-        border: 1px solid #2563eb;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+      }
+
+      button.outline:hover {
+        background: rgba(59, 130, 246, 0.08);
       }
 
       button.danger {
-        background: #dc2626;
+        background: var(--danger);
       }
 
       button.danger:hover {
-        background: #b91c1c;
+        background: #dc2626;
       }
 
       .message {
@@ -235,34 +316,36 @@
       }
 
       thead th {
-        color: #475569;
-        font-size: 0.95rem;
-        letter-spacing: 0.02em;
+        color: var(--dark);
+        font-size: 0.9rem;
+        letter-spacing: 0.03em;
         text-transform: uppercase;
-        border-bottom: 2px solid #e2e8f0;
+        border-bottom: 2px solid var(--primary);
+        font-weight: 700;
+        background: linear-gradient(180deg, rgba(14, 165, 233, 0.05), transparent);
       }
 
       tbody tr {
-        transition: transform 0.2s ease, background-color 0.2s ease;
+        transition: all 0.2s ease;
       }
 
       tbody tr:hover {
-        background: rgba(59, 130, 246, 0.06);
+        background: linear-gradient(90deg, rgba(14, 165, 233, 0.08), rgba(14, 165, 233, 0.04));
         transform: translateX(4px);
       }
 
       tbody td {
-        border-bottom: 1px solid #e2e8f0;
-        color: #1f2937;
+        border-bottom: 1px solid var(--border);
+        color: var(--dark);
       }
 
       .pos {
-        color: #0f766e;
+        color: var(--success);
         font-weight: 700;
       }
 
       .neg {
-        color: #b91c1c;
+        color: var(--danger);
         font-weight: 700;
       }
 
@@ -274,16 +357,19 @@
       }
 
       .preview-chip {
-        padding: 10px 14px;
+        padding: 10px 16px;
         border-radius: 999px;
-        background: #eff6ff;
-        color: #1d4ed8;
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(6, 182, 212, 0.12));
+        color: var(--primary-dark);
         font-weight: 600;
+        font-size: 0.9rem;
+        border: 1px solid rgba(14, 165, 233, 0.3);
       }
 
       .preview-chip.secondary {
-        background: #f1f5f9;
+        background: linear-gradient(135deg, rgba(100, 116, 139, 0.08), rgba(100, 116, 139, 0.08));
         color: #475569;
+        border-color: var(--border);
       }
 
       .multi-select-field {
@@ -379,21 +465,75 @@
 
       .settlement-list {
         list-style: none;
-        padding-left: 0;
+        padding: 0;
         margin: 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
       }
 
       .settlement-list li {
-        padding: 12px 16px;
-        border-radius: 18px;
-        background: #f8fafc;
-        color: #0f172a;
-        border: 1px solid #e2e8f0;
-        margin-bottom: 10px;
+        padding: 16px 18px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.06) 0%, rgba(96, 165, 250, 0.06) 100%);
+        color: var(--dark);
+        border: 1px solid rgba(59, 130, 246, 0.15);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .settlement-list li:hover {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(96, 165, 250, 0.12) 100%);
+        border-color: rgba(59, 130, 246, 0.3);
+        transform: translateX(4px);
+        box-shadow: 0 8px 16px rgba(59, 130, 246, 0.1);
+      }
+
+      .settlement-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+      }
+
+      .settlement-from {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        color: var(--success);
+      }
+
+      .settlement-to {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        color: #0284c7;
+      }
+
+      .settlement-amount {
+        background: linear-gradient(135deg, #3b82f6, #60a5fa);
+        color: white;
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-weight: 700;
+        white-space: nowrap;
+        font-size: 0.95rem;
+      }
+
+      .settlement-arrow {
+        color: var(--text-secondary);
+        margin: 0 8px;
+        font-size: 1.2rem;
       }
 
       .admin-panel {
-        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        display: none;
       }
 
       .admin-header {
@@ -505,6 +645,261 @@
         }
       }
 
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .calendar-day {
+        aspect-ratio: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 0.85rem;
+        padding: 4px;
+      }
+
+      .calendar-day:hover {
+        background: #eff6ff;
+        border-color: #2563eb;
+      }
+
+      .calendar-day.has-session {
+        background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+        border-color: #2563eb;
+        font-weight: 700;
+        color: #1e40af;
+      }
+
+      .calendar-day-number {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .calendar-day-count {
+        font-size: 0.7rem;
+        color: #64748b;
+      }
+
+      .calendar-day.has-session .calendar-day-count {
+        color: #1e40af;
+      }
+
+      .calendar-day-tooltip {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        padding: 12px 14px;
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+        z-index: 20;
+        min-width: 220px;
+        font-size: 0.85rem;
+        white-space: normal;
+        margin-bottom: 8px;
+        pointer-events: none;
+      }
+
+      .calendar-day-tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: white;
+      }
+
+      .tooltip-session {
+        padding: 6px 0;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 0.8rem;
+      }
+
+      .tooltip-session:last-child {
+        border-bottom: none;
+      }
+
+      .tooltip-payer {
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .tooltip-players {
+        color: #475569;
+        font-size: 0.75rem;
+        margin-top: 2px;
+      }
+
+      .tooltip-cost {
+        color: #2563eb;
+        font-weight: 600;
+        font-size: 0.8rem;
+      }
+
+      .calendar-day {
+        position: relative;
+      }
+
+      .calendar-header {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .calendar-header-day {
+        text-align: center;
+        font-weight: 700;
+        color: #475569;
+        font-size: 0.85rem;
+        padding: 8px 0;
+      }
+
+      .calendar-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 16px;
+      }
+
+      .calendar-month-year {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0f172a;
+        text-align: center;
+        flex: 1;
+        min-width: 150px;
+      }
+
+      .calendar-nav button {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        border-radius: 10px;
+      }
+
+      .trend-chart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 320px;
+        margin: 24px 0;
+        position: relative;
+      }
+
+      .trend-chart canvas {
+        max-height: 320px;
+      }
+
+      .trend-bar {
+        display: none;
+      }
+
+      .trend-bar-fill {
+        display: none;
+      }
+
+      .trend-bar-label {
+        display: none;
+      }
+
+      .trend-bar-value {
+        display: none;
+      }
+      .player-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .player-stat-card {
+        padding: 18px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
+        border: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        transition: all 0.3s ease;
+      }
+
+      .player-stat-card:hover {
+        transform: translateY(-4px);
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+        border-color: #7c3aed;
+        box-shadow: 0 12px 24px rgba(124, 58, 237, 0.1);
+      }
+
+      .player-stat-name {
+        font-weight: 700;
+        color: var(--dark);
+        font-size: 1.05rem;
+      }
+
+      .player-stat-info {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .stat-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .trend-insight {
+        padding: 14px 18px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(96, 165, 250, 0.08));
+        border-left: 4px solid var(--primary);
+        color: var(--dark);
+        font-size: 0.95rem;
+        font-weight: 500;
+        margin-bottom: 16px;
+      }
+
+      .dashboard-section {
+        background: linear-gradient(135deg, #ffffff 0%, #f9fbff 100%);
+        border-radius: 20px;
+        padding: 28px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(14, 165, 233, 0.08);
+        border: 1px solid var(--border);
+        transition: all 0.3s ease;
+      }
+
+      .dashboard-section:hover {
+        box-shadow: 0 15px 50px rgba(14, 165, 233, 0.12);
+      }
+
+      .dashboard-section h2 {
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
       @media (max-width: 1024px) {
         .metrics-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -537,6 +932,7 @@
     <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/react@18/umd/react.development.min.js"></script>
     <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.23.4/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script type="text/babel">
       const { useEffect, useMemo, useRef, useState } = React;
       const { createRoot } = ReactDOM;
@@ -601,10 +997,43 @@
         const [message, setMessage] = useState("");
         const [adminMode, setAdminMode] = useState(false);
         const [adminCode, setAdminCode] = useState("");
+        const [selectedCalendarDay, setSelectedCalendarDay] = useState(null);
         const [newPlayerName, setNewPlayerName] = useState("");
         const [playersDropdownOpen, setPlayersDropdownOpen] = useState(false);
+        const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+        const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
         const playersDropdownRef = useRef(null);
         const importInputRef = useRef(null);
+        const trendChartRef = useRef(null);
+        let trendChartInstance = useRef(null);
+
+        const getSessionsForDate = (dateStr) => {
+          return sessions.filter((s) => s.date === dateStr);
+        };
+
+        const handleCalendarDayClick = (dateStr, count) => {
+          if (count > 0) {
+            setSelectedCalendarDay(selectedCalendarDay === dateStr ? null : dateStr);
+          }
+        };
+
+        const goToPreviousMonth = () => {
+          if (selectedMonth === 0) {
+            setSelectedMonth(11);
+            setSelectedYear(selectedYear - 1);
+          } else {
+            setSelectedMonth(selectedMonth - 1);
+          }
+        };
+
+        const goToNextMonth = () => {
+          if (selectedMonth === 11) {
+            setSelectedMonth(0);
+            setSelectedYear(selectedYear + 1);
+          } else {
+            setSelectedMonth(selectedMonth + 1);
+          }
+        };
 
         const [form, setForm] = useState({
           date: "",
@@ -631,6 +1060,84 @@
         useEffect(() => {
           localStorage.setItem(STORAGE_KEY, JSON.stringify({ team, sessions, playersConfig }));
         }, [team, sessions, playersConfig]);
+
+        useEffect(() => {
+          if (!trendChartRef.current || sessions.length === 0) return;
+
+          const ctx = trendChartRef.current.getContext("2d");
+          const monthly = getMonthlySpending();
+          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          const data = months.map((_, idx) => monthly[String(idx + 1).padStart(2, '0')] || 0);
+
+          if (trendChartInstance.current) {
+            trendChartInstance.current.destroy();
+          }
+
+          trendChartInstance.current = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: months,
+              datasets: [{
+                label: 'Monthly Spending (₹)',
+                data: data,
+                backgroundColor: 'rgba(14, 165, 233, 0.85)',
+                borderColor: 'rgba(14, 165, 233, 1)',
+                borderWidth: 2,
+                borderRadius: 10,
+                hoverBackgroundColor: 'rgba(2, 132, 199, 0.95)',
+                hoverBorderColor: 'rgba(2, 132, 199, 1)',
+              }],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              indexAxis: undefined,
+              plugins: {
+                legend: {
+                  display: true,
+                  labels: {
+                    font: { size: 12, weight: '600' },
+                    color: '#111827',
+                    usePointStyle: true,
+                    padding: 15,
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: 'Amount (₹)',
+                    font: { weight: 'bold' },
+                  },
+                  ticks: {
+                    font: { size: 11 },
+                    color: '#64748b',
+                    callback: function(value) {
+                      if (value === 0) return '₹0';
+                      if (value >= 1000) return '₹' + (value / 1000).toFixed(1) + 'k';
+                      return '₹' + value;
+                    },
+                  },
+                  grid: {
+                    color: 'rgba(203, 213, 225, 0.2)',
+                    drawBorder: false,
+                  },
+                },
+                x: {
+                  ticks: {
+                    font: { size: 11, weight: '500' },
+                    color: '#64748b',
+                  },
+                  grid: {
+                    display: false,
+                  },
+                },
+              },
+            },
+          });
+        }, [sessions]);
 
         useEffect(() => {
           const handleClickOutside = (event) => {
@@ -719,6 +1226,57 @@
           setTeam([]);
           setSessions([]);
           setMessage("All data cleared.");
+        };
+
+        // Dashboard analytics functions
+        const getMonthlySpending = () => {
+          const monthly = {};
+          sessions.forEach((s) => {
+            const [year, month] = s.date.split("-");
+            const key = `${month}`;
+            monthly[key] = (monthly[key] || 0) + s.hours * RATE_PER_HOUR;
+          });
+          return monthly;
+        };
+
+        const getPlayerStats = () => {
+          const stats = {};
+          team.forEach((player) => {
+            stats[player] = { sessions: 0, totalHours: 0, totalSpent: 0 };
+          });
+          sessions.forEach((s) => {
+            stats[s.payer] = stats[s.payer] || { sessions: 0, totalHours: 0, totalSpent: 0 };
+            stats[s.payer].sessions += 1;
+            stats[s.payer].totalHours += s.hours;
+            stats[s.payer].totalSpent += s.hours * RATE_PER_HOUR;
+            s.players.forEach((p) => {
+              if (stats[p]) {
+                stats[p].sessions += 1;
+                stats[p].totalHours += s.hours;
+              }
+            });
+          });
+          return stats;
+        };
+
+        const getCalendarData = () => {
+          const calendar = {};
+          sessions.forEach((s) => {
+            calendar[s.date] = (calendar[s.date] || 0) + 1;
+          });
+          return calendar;
+        };
+
+        const getTrendInsight = () => {
+          if (sessions.length < 2) return null;
+          const recentAvg = sessions.slice(-5).reduce((sum, s) => sum + s.hours, 0) / Math.min(5, sessions.length);
+          const allAvg = sessions.reduce((sum, s) => sum + s.hours, 0) / sessions.length;
+          if (recentAvg > allAvg * 1.2) {
+            return `📈 Activity increased! Recent average: ${recentAvg.toFixed(1)} hrs/session`;
+          } else if (recentAvg < allAvg * 0.8) {
+            return `📉 Activity decreased. Recent average: ${recentAvg.toFixed(1)} hrs/session`;
+          }
+          return `➡️ Steady activity. Average: ${allAvg.toFixed(1)} hrs/session`;
         };
 
         const unlockAdmin = (e) => {
@@ -851,7 +1409,7 @@
             </div>
 
             <section className="card fade-in delay-1">
-              <h2>Add Session</h2>
+              <h2><span className="section-icon icon-add"><i className="fas fa-plus"></i></span>Add Session</h2>
               <form onSubmit={onAddSession} className="session-form">
                 <div className="grid form-grid">
                   <label>
@@ -981,7 +1539,7 @@
             </section>
 
             <section className="card fade-in delay-2">
-              <h2>Activity</h2>
+              <h2><span className="section-icon icon-activity"><i className="fas fa-history"></i></span>Activity</h2>
               <div className="responsive-table">
                 <table>
                   <thead>
@@ -1014,7 +1572,7 @@
 
             <section className="card fade-in delay-3">
               <div className="balances-header">
-                <h2>Balances</h2>
+                <h2><span className="section-icon icon-balance"><i className="fas fa-wallet"></i></span>Balances</h2>
                 <div className="balance-summary">
                   {settlements.length
                     ? 'Settle up to keep the team aligned.'
@@ -1048,16 +1606,168 @@
             </section>
 
             <section className="card fade-in delay-4">
-              <h2>Suggested Settlements</h2>
+              <h2><span className="section-icon icon-settlement"><i className="fas fa-handshake"></i></span>Suggested Settlements</h2>
               <ul className="settlement-list">
                 {settlements.length ? (
-                  settlements.map((settlement, index) => (
-                    <li key={index}>{settlement}</li>
-                  ))
+                  settlements.map((settlement, index) => {
+                    // Parse settlement text: "A pays B: ₹100"
+                    const match = settlement.match(/(.+?)\s+pays\s+(.+?):\s+₹([\d.]+)/);
+                    if (match) {
+                      const [, from, to, amount] = match;
+                      return (
+                        <li key={index}>
+                          <div className="settlement-item">
+                            <span className="settlement-from">
+                              <i className="fas fa-user"></i>
+                              {from}
+                            </span>
+                            <span className="settlement-arrow">
+                              <i className="fas fa-arrow-right"></i>
+                            </span>
+                            <span className="settlement-to">
+                              <i className="fas fa-user"></i>
+                              {to}
+                            </span>
+                          </div>
+                          <span className="settlement-amount">₹{parseFloat(amount).toFixed(2)}</span>
+                        </li>
+                      );
+                    }
+                    return <li key={index}>{settlement}</li>;
+                  })
                 ) : (
-                  <li>No settlements needed.</li>
+                  <li style={{ background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0.05) 100%)', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <i className="fas fa-check-circle" style={{ color: '#22c55e' }}></i>
+                      <span style={{ color: '#166534', fontWeight: '600' }}>All settled up! No payments needed.</span>
+                    </div>
+                  </li>
                 )}
               </ul>
+            </section>
+
+            <section className="dashboard-section fade-in delay-5">
+              <h2><span className="section-icon icon-trends"><i className="fas fa-chart-bar"></i></span>Spending Trends</h2>
+              {sessions.length > 0 ? (
+                <div>
+                  <div className="trend-insight">{getTrendInsight()}</div>
+                  <div className="trend-chart">
+                    <canvas ref={trendChartRef} id="trendChart"></canvas>
+                  </div>
+                </div>
+              ) : (
+                <p className="empty-state">No data yet. Add sessions to see trends.</p>
+              )}
+            </section>
+
+            <section className="dashboard-section fade-in delay-5">
+              <h2><span className="section-icon icon-players"><i className="fas fa-users"></i></span>Active Players</h2>
+              {team.length > 0 ? (
+                <div className="player-stats-grid">
+                  {(() => {
+                    const stats = getPlayerStats();
+                    return Object.entries(stats)
+                      .sort((a, b) => b[1].sessions - a[1].sessions)
+                      .map(([player, data]) => (
+                        <div key={player} className="player-stat-card">
+                          <div className="player-stat-name">{player}</div>
+                          <div className="player-stat-info">
+                            <span>
+                              <span className="stat-badge">{data.sessions} sessions</span>
+                            </span>
+                            <span>
+                              <span className="stat-badge">{data.totalHours.toFixed(1)} hrs</span>
+                            </span>
+                          </div>
+                          <div className="player-stat-info">
+                            <strong>₹{data.totalSpent.toFixed(0)}</strong>
+                            <span style={{ color: '#64748b' }}>total involvement</span>
+                          </div>
+                        </div>
+                      ));
+                  })()}
+                </div>
+              ) : (
+                <p className="empty-state">No active players. Add sessions to see player stats.</p>
+              )}
+            </section>
+
+            <section className="dashboard-section fade-in delay-5">
+              <h2><span className="section-icon icon-calendar"><i className="fas fa-calendar-alt"></i></span>Session Calendar</h2>
+              {sessions.length > 0 ? (
+                <div>
+                  <div className="calendar-nav">
+                    <button type="button" onClick={goToPreviousMonth}>← Previous</button>
+                    <div className="calendar-month-year">
+                      {new Date(selectedYear, selectedMonth).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                    </div>
+                    <button type="button" onClick={goToNextMonth}>Next →</button>
+                  </div>
+                  <div className="calendar-header">
+                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                      <div key={day} className="calendar-header-day">
+                        {day}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="calendar-grid">
+                    {(() => {
+                      const year = selectedYear;
+                      const month = selectedMonth;
+                      const firstDay = new Date(year, month, 1);
+                      const lastDay = new Date(year, month + 1, 0);
+                      const daysInMonth = lastDay.getDate();
+                      const startingDayOfWeek = firstDay.getDay();
+                      const calendarData = getCalendarData();
+                      const days = [];
+
+                      for (let i = 0; i < startingDayOfWeek; i++) {
+                        days.push(null);
+                      }
+                      for (let i = 1; i <= daysInMonth; i++) {
+                        days.push(i);
+                      }
+
+                      return days.map((day, idx) => {
+                        if (!day) {
+                          return <div key={`empty-${idx}`} className="calendar-day" style={{ visibility: 'hidden' }} />;
+                        }
+                        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        const count = calendarData[dateStr] || 0;
+                        const daySessionsForDate = getSessionsForDate(dateStr);
+                        const showTooltip = selectedCalendarDay === dateStr && count > 0;
+                        return (
+                          <div
+                            key={day}
+                            className={`calendar-day ${count > 0 ? 'has-session' : ''}`}
+                            onClick={() => handleCalendarDayClick(dateStr, count)}
+                            style={{ cursor: count > 0 ? 'pointer' : 'default' }}
+                          >
+                            <div className="calendar-day-number">{day}</div>
+                            {count > 0 && <div className="calendar-day-count">{count}📍</div>}
+                            {showTooltip && (
+                              <div className="calendar-day-tooltip">
+                                {daySessionsForDate.map((sess, sIdx) => (
+                                  <div key={sIdx} className="tooltip-session">
+                                    <div className="tooltip-payer"><i className="fas fa-user-circle"></i> {sess.payer}</div>
+                                    <div className="tooltip-players">Players: {sess.players.join(', ')}</div>
+                                    <div className="tooltip-cost">₹{(sess.hours * RATE_PER_HOUR).toFixed(0)} ({sess.hours}h)</div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      });
+                    })()}
+                  </div>
+                  <small style={{ color: '#64748b', marginTop: '12px', display: 'block' }}>
+                    Current month view • Highlighted dates have sessions
+                  </small>
+                </div>
+              ) : (
+                <p className="empty-state">No sessions yet. Add a session to populate the calendar.</p>
+              )}
             </section>
 
             <section className="card admin-panel fade-in delay-5">
