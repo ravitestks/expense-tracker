@@ -542,7 +542,6 @@
       const { createRoot } = ReactDOM;
 
       const RATE_PER_HOUR = 200;
-      const MAX_PLAYERS = 4;
       const STORAGE_KEY = "office-games-expense-tracker-v2";
 
       const normalizeName = (value) => value.trim().replace(/\s+/g, " ");
@@ -670,10 +669,6 @@
                 players: prev.players.filter((value) => value !== player),
               };
             }
-            if (prev.players.length >= MAX_PLAYERS) {
-              setMessage(`Select up to ${MAX_PLAYERS} players.`);
-              return prev;
-            }
             return {
               ...prev,
               players: [...prev.players, player],
@@ -692,8 +687,8 @@
 
             if (!form.date) throw new Error("Date is required.");
             if (!(hours > 0)) throw new Error("Hours must be greater than 0.");
-            if (players.length < 1 || players.length > MAX_PLAYERS) {
-              throw new Error(`Players must be between 1 and ${MAX_PLAYERS}.`);
+            if (players.length < 1) {
+              throw new Error("At least one player must be selected.");
             }
             if (!payer) throw new Error("Payer is required.");
 
@@ -912,7 +907,7 @@
                       >
                         {form.players.length > 0
                           ? form.players.join(', ')
-                          : `Select players (max ${MAX_PLAYERS})`}
+                          : 'Select players'}
                         <span className="arrow">
                           {playersDropdownOpen ? '▲' : '▼'}
                         </span>
@@ -921,14 +916,12 @@
                         <div className="multi-select-list">
                           {playersConfig.map((player) => {
                             const selected = form.players.includes(player);
-                            const disabled = !selected && form.players.length >= MAX_PLAYERS;
                             return (
                               <button
                                 key={player}
                                 type="button"
-                                className={`multi-select-item ${selected ? 'selected' : ''} ${disabled ? 'disabled' : ''}`}
+                                className={`multi-select-item ${selected ? 'selected' : ''}`}
                                 onClick={() => togglePlayerSelection(player)}
-                                disabled={disabled}
                               >
                                 <span>{player}</span>
                                 {selected && <span className="checkmark">✓</span>}
@@ -939,7 +932,7 @@
                       )}
                     </div>
                     <small>
-                      {form.players.length} selected, up to {MAX_PLAYERS}
+                      {form.players.length} selected
                     </small>
                   </label>
                 </div>
